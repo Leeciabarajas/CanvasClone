@@ -1,0 +1,254 @@
+﻿@page
+@using SeeSharpLMS.Utility
+@model SeeSharpLMS.LandingPageModel
+@{
+    ViewData["Title"] = "LandingPage";
+}
+
+
+@* this allows me to change the page layout *@
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    @* everything below this is considered a "row" this helps align things *@
+    <div class="text-left">
+
+        @*@if (User.IsInRole(SD.InstructorRole))
+            {
+                <h1> @Model.user.FullName </h1>
+            }
+            else if (User.IsInRole(SD.StudentRole))
+            {
+                <h1> @Model.user.FullName</h1>
+            }*@
+
+        <h1 class="text-info">Your Courses:</h1>
+
+        <div class="row">
+            <div class="container col-10">
+                @*display all courses in 3 divisible rows*@
+                @for (int i = 0; i < Model.CourseInfos.Count() / 3; i++)
+                {
+
+                    <div class="card-deck card-group">
+                        @foreach (var x in Model.CourseInfos.GetRange(i * 3, 3))
+                        {
+                            <div class="card bg-info">
+                                <div class="card-body text-lg-center text-white">
+                                    <div class="card-header bg-secondary font-weight-bolder border border-light">
+                                        @x.Course.Subject @x.Course.Number
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-text">@x.Course.Title</h5>
+                                    </div>
+                                    @if (User.IsInRole(SD.InstructorRole))
+                                    {
+                                        <div class="card-body">
+                                            <a asp-page="Assignment/Index" asp-route-sectionID="@x.SectionId"
+                                               class="btn btn-outline-secondary btn-sm card-link bg-light">Assignments</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="card-body">
+                                            <a asp-page="Assignment/StudentAssignment" asp-route-sectionID="@x.SectionId"
+                                               class="btn btn-outline-secondary btn-sm card-link bg-light">Assignments</a>
+                                        </div>
+                                        <div>
+                                            <a asp-page="/StudentGrades" asp-route-sectionID="@x.SectionId"
+                                               class="btn btn-outline-secondary btn-sm bg-light">Grades</a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <br />
+                }
+                @*display any left over courses*@
+                @if (Model.CourseInfos.Count() % 3 != 0)
+                {
+
+                    <div class="card-deck card-group">
+                        @foreach (var x in Model.CourseInfos.GetRange((Model.CourseInfos.Count() - Model.CourseInfos.Count() % 3), Model.CourseInfos.Count() % 3))
+                        {
+                            <div class="card bg-info">
+                                <div class="card-body text-lg-center text-white">
+                                    <div class="card-header bg-secondary">@x.Course.Subject @x.Course.Number</div>
+                                    <div class="card-body">
+                                        <h5 class="card-text">@x.Course.Title</h5>
+                                    </div>
+                                    @if (User.IsInRole(SD.InstructorRole))
+                                    {
+                                        <div class="card-body">
+                                            <a asp-page="Assignment/Index" asp-route-sectionID="@x.SectionId"
+                                               class="btn btn-outline-secondary btn-sm card-link bg-light">Assignments</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="card-body">
+                                            <a asp-page="Assignment/StudentAssignment" asp-route-sectionID="@x.SectionId"
+                                               class="btn btn-outline-secondary btn-sm card-link bg-light">Assignments</a>
+                                        </div>
+                                        <div>
+                                            <a asp-page="/StudentGrades" asp-route-sectionID="@x.SectionId"
+                                               class="btn btn-outline-secondary btn-sm bg-light">Grades</a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <br />
+                }
+            </div>
+            <div class="col-sm-2 ">
+                @*our second "column is small and needs tweeking so it fits off to the right better *@
+            
+                @*Instructor publish assignment (Create, Delete, Edit, Grade) => Student'page*@
+                @if (User.IsInRole(SD.StudentRole))
+                {
+                    <div class="dropdown show">
+                        <button id="view-notification" class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           Notifications:
+                            @foreach (var c in Model.CourseInfos)
+                            {
+                                @foreach (var a in c.Assignments)
+                                {
+
+                                    if (a.Flag == true)
+                                    {
+                                        <span id="notification-badge" class="badge badge-info">New</span>
+                                        break;
+                                    }
+                                    break;
+                                }
+                                
+                            }
+                            </button>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <b class="dropdown-header">--Unread Message(s)--</b><br />
+                            @foreach (var a in Model.CourseInfos)
+                            {
+                                @foreach (var s in a.Assignments)
+                                {
+                                    if (s.Flag == true)
+                                    {
+                                        <span class="dropdown-item" >Instructor created a "@s.Title" assignment!</span>
+                                        <br />
+                                    }
+
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+
+                @*Student Submit homework => Instuctor' page*@
+                else
+                {
+                    <div class="dropdown show">
+                        <button id="view-notification" class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Notification
+
+                            @foreach (var s in Model.Submissions)
+                            {
+
+                                if (s.Flag == true)
+                                {
+                                    <span id="notification-badge" class="badge badge-danger">New</span>
+                                    break;
+                                }
+
+                                else
+                                {
+
+                                }
+                            }
+
+                        </button>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <b class="dropdown-header">--Unread Message(s)--</b><br />
+
+                            @foreach (var s in Model.Submissions)
+                            {
+                                if (s.Flag == true)
+                                {
+                                    <a  class="dropdown-item">@s.StudentAssignment.Assignment.Section.ApplicationUser.FullName just sumbitted!</a>
+                                    <br />
+                                }
+
+                            }
+
+                            <a class="dropdown-item" asp-page="">******</a>
+                        </div>
+                    </div>
+
+
+                }
+                <br />
+                <br />
+                <br />
+                <br />
+
+
+                <h4 class="text-info">To-Do List:</h4>
+                <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light border border-info" style="max-height:350px; max-width:600px; ">
+
+                    @* I made a list of type tuple to hold my assigments and courses  *@
+                    @{ List<(SeeSharpLMS.Models.Assignment, SeeSharpLMS.Models.Course)> OrderedAssignments = new List<(SeeSharpLMS.Models.Assignment, SeeSharpLMS.Models.Course)>(); }
+
+
+                    @foreach (var courseInfo in Model.CourseInfos)
+                    {
+                        @foreach (var assignment in courseInfo.Assignments)
+                        {
+                            //I only want dates in the future, add them to my fancy list
+                            @if (assignment.DueDate >= DateTime.Now)
+                            {
+                                OrderedAssignments.Add((assignment, courseInfo.Course));
+
+
+                                @*<a><b>@courseInfo.Course.Subject @courseInfo.Course.Number</b> - @assignment.Title</a>
+                        <i>Due: @assignment.DueDate</i>*@
+                            }
+                        }
+                    }
+
+                    @* now order by list based off of the due date *@
+                    @foreach (var assigment in OrderedAssignments.OrderBy(a => a.Item1.DueDate))
+                    {
+
+
+                        //Note: Item2 is course, Item1 is assigment
+                        <a><b>@assigment.Item2.Subject @assigment.Item2.Number</b> - @assigment.Item1.Title</a>
+                        <i>Due: @assigment.Item1.DueDate</i>
+                        <br />
+                        <br />
+                    }
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var tag = document.getElementById('view-notification');
+
+        tag.onclick = function () {
+                document.getElementById('notification-badge').hidden = true;
+            };
+    </script>
+}

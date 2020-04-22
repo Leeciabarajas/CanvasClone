@@ -1,0 +1,99 @@
+﻿@page
+@model SeeSharpLMS.GradingEditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>@Model.Input.Assignment.Title</h1>
+<hr />
+<h4>Enter Grade for @Model.Input.ApplicationUser.FullName:</h4>
+<h6>Current Grade: @Model.Input.Grade</h6>
+<form method="post">
+    <input type="hidden" asp-for="Input.Id" value="@Model.Input.Id" />
+    <input type="hidden" asp-for="Input.AssignmentId" value="@Model.Input.AssignmentId" />
+    <input type="hidden" asp-for="Input.StudentId" value="@Model.Input.StudentId" />
+    <div class="form-group">
+        <input type="text" min="0" max="@Model.Input.Assignment.PointValue" placeholder="@Model.Input.Grade" asp-for="Input.Grade" style="width:40px;" />
+        <span asp-validation-for="Input.Grade" class="text-danger"></span>
+        <label>out of @Model.Input.Assignment.PointValue</label>
+    </div>
+    <button type="submit" class="btn btn-success">Save Grade</button>
+</form>
+<br />
+@if (Model.Submission.Count == 0)
+{
+    <h3>No Submissions</h3>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @if (Model.Submission[0].StudentAssignment.Assignment.AssignmentTypeId == 1)
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.Submission[0].TextEntry)
+                    </th>
+                }
+                else if (Model.Submission[0].StudentAssignment.Assignment.AssignmentTypeId == 2)
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.Submission[0].FilePath)
+                    </th>
+                }
+                <th>
+                    @Html.DisplayNameFor(model => model.Submission[0].Date)
+                </th>
+                <th>
+                    Status
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Submission)
+            {
+                <tr>
+                    @if (Model.Submission[0].StudentAssignment.Assignment.AssignmentTypeId == 1)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TextEntry)
+                        </td>
+                    }
+                    else if (Model.Submission[0].StudentAssignment.Assignment.AssignmentTypeId == 2)
+                    {
+                        <td>
+                            <a href="~/FileUploads/@item.FilePath" target="_blank">@item.FilePath</a>
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @if (item.Date > item.StudentAssignment.Assignment.DueDate)
+                        {
+                            <b>LATE</b>
+                        }
+                        else
+                        {
+                            <b>ON TIME</b>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+<br />
+<br />
+
+<div>
+    <a asp-page="./Index" asp-route-id="@Model.Input.AssignmentId">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,26 @@
+﻿@page
+@model SeeSharpLMS.PaymentConfirmationModel
+@{
+    ViewData["Title"] = "PaymentConfirmation";
+}
+
+@if (Model.Success)
+{
+    <h1>Payment Successful!</h1>
+    <hr />
+    <h3>Thank you for learning with the SeeSharp LMS</h3>
+}
+else
+{
+    <h1>Payment Incomplete</h1>
+    <hr />
+    <h3>It looks like there was a problem. Please check your payment information</h3>
+
+}
+
+<div>
+    <a asp-page="Index">Return to Account Balance</a>
+</div>
+
+
+

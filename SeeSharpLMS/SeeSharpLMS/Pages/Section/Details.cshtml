@@ -1,0 +1,127 @@
+﻿@page
+@using SeeSharpLMS.Utility
+@model SeeSharpLMS.SectionDetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@if (User.IsInRole(SD.InstructorRole))
+{
+
+    <h1>Details</h1>
+
+    <div>
+        <h4>Section</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.ApplicationUser)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.ApplicationUser.Id)
+            </dd>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Course.Subject)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Course.Subject)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Course.Number)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Course.Number)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Course.Title)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Course.Title)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Course.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Course.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Term)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Term.TermDisplay)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.StartTime)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.StartTime)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.EndTime)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.EndTime)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Days)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Days)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Location)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Location)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.EnrollmentCap)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.EnrollmentCap)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-page="./Edit" asp-route-id="@Model.Section.Id">Edit</a> |
+        <a asp-page="./Index">Back to List</a>
+    </div>
+    <table class="table table-info">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Enrollments[0].ApplicationUser.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Enrollments[0].ApplicationUser.FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Enrollments[0].FinalGrade)
+                </th>
+            </tr>
+        </thead>
+        <tbody class="table-info bg-light">
+            @foreach (var item in Model.Enrollments)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FinalGrade)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1 class="text-danger">Access Denied</h1>
+
+}

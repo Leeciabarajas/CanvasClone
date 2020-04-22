@@ -1,0 +1,42 @@
+﻿@page
+@model SeeSharpLMS.EnrollmentCreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Enrollment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Enrollment.StudentId" class="control-label"></label>
+                @*<select asp-for="Enrollment.StudentId" class ="form-control" asp-items="ViewBag.StudentId"></select>*@
+                <input asp-for="Enrollment.StudentId" class="form-control border-info" value="@Model.user.Id" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Enrollment.SectionId" class="control-label"></label>
+                @*<select asp-for="Enrollment.SectionId" class="form-control" asp-items="ViewBag.SectionId"></select>*@
+                <select asp-for="Enrollment.SectionId" class="form-control border-info" asp-items="ViewBag.SectionId"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-info" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,53 @@
+﻿@page
+@model SeeSharpLMS.MakePaymentModel
+
+@{
+    ViewData["Title"] = "Make a Payment";
+}
+
+<h1>Enter Payment Information</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="PaymentInfo.Amount" class="control-label"></label>
+                <input asp-for="PaymentInfo.Amount" class="form-control  border-info" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PaymentInfo.CardNumber" class="control-label"></label>
+                <input asp-for="PaymentInfo.CardNumber" class="form-control  border-info" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PaymentInfo.ExpMonth" class="control-label"></label>
+                <input asp-for="PaymentInfo.ExpMonth" class="form-control  border-info" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PaymentInfo.ExpYear" class="control-label"></label>
+                <input asp-for="PaymentInfo.ExpYear" class="form-control  border-info" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PaymentInfo.CVC" class="control-label"></label>
+                <input asp-for="PaymentInfo.CVC" class="form-control  border-info" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Submit Payment" class="btn btn-info" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Return to Account Balance</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

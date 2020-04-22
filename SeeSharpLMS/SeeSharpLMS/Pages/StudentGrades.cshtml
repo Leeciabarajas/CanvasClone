@@ -1,0 +1,96 @@
+﻿@page
+@model SeeSharpLMS.StudentGradesModel
+
+@{
+    ViewData["Title"] = "StudentGrades";
+}
+
+@{ 
+    Layout = "_StudentGradesLayout";
+}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<h1>Class Grades</h1>
+
+<table class="table table-info">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.PointValue)
+            </th>
+           <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.DueDate)
+            </th>
+           <th>
+               @Html.DisplayNameFor(model => model.StudentAssignment[0].Grade)
+           </th>
+
+        </tr>
+    </thead>
+    <tbody class="table-info bg-light">
+        @{int i = 0;
+            float? total = 0;
+            float? actual = 0;
+            float? percentage;}
+        @foreach (var item in Model.StudentAssignment)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assignment.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assignment.PointValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assignment.DueDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Grade)
+                <button class="btn" id="@("stats" + i)" onclick="statsDisplay(this.id)"><i class="fas fa-poll"></i></button>
+            </td>
+        </tr>
+        <tr id="@("stats" + i + "info")" hidden>
+            <td class="text-center">
+                <div id="@("chart" + i)"></div>
+            </td>
+            <td colspan="3">
+                Average = @Html.DisplayFor(modelItem => item.AverageScore) | Min = @Html.DisplayFor(modelItem => item.MinScore) | Max = @Html.DisplayFor(modelItem => item.MaxScore)
+            </td>
+        </tr>
+            i++;
+            @if(item.Grade != null)
+            {
+                total += item.Assignment.PointValue;
+                actual += item.Grade;
+            }
+            
+        }
+        @if (total == 0)
+        {
+            percentage = 100;
+        }
+        else
+        {
+            percentage = (actual / total) * 100;
+        }        
+        <tr>
+            <td colspan="3"></td>
+            <td>@("Total: " + actual + "/" + total + " (" + percentage + "%)")</td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    //function hides/displays stats info setion
+    function statsDisplay(clicked) {
+        var x = document.getElementById(clicked + "info");
+        console.log(x);
+        if (x.hidden == true) {
+            x.hidden = false;
+        }
+        else {
+            x.hidden = true;
+        }
+    }
+</script>

@@ -1,0 +1,243 @@
+﻿@page
+@using SeeSharpLMS.Utility
+@model SeeSharpLMS.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+@* this allows me to change the page layout *@
+@{
+    Layout = "_Layout";
+}
+
+
+
+<h1>Profile</h1>
+
+<div class="container ">
+
+    <div class="col-lg-4 ">
+
+        <form method="post" enctype="multipart/form-data">
+            @*Connect Image to Database and display here -Weilun*@
+
+            <div class="py-2">
+                @*Display *@
+                @if (Model.user.ImagePath != null)
+                {
+                    <img src="~/uploads/@Model.user.ImagePath" class="rounded border border-info" width="320" height="320" />
+                }
+                else
+                {
+                    <img src="~/uploads/ProfilePic.png" class="rounded" width="320" height="320" />
+                }
+                <div class="form-group">
+                    <div class="pt-2">
+                        <label id="HiddenLabel" asp-for="Input.ImagePath" hidden>Upload Image:</label><br />
+                        <input id="ChooseImage" type="file" name="file" hidden disabled class="form-control-file" />
+                        <span asp-validation-for="Input.ImagePath" class="text-danger form-control-file"></span><br />
+                    </div>
+
+
+
+                    <div class="pt-2">
+                        <button type="submit" id="UploadImage" class="btn btn-outline-info form-control" hidden disabled>Upload Selected Image</button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            @*Label and box for first name, called EditFirstName*@
+            <div class="pt-2">
+                <label for="EditFirstName"> First Name: </label>
+            </div>
+            <div class="pb-2 form-group ">
+                <input name="EditFirstName" id="EditFirstName" class="form-control border border-info" type="text" value="@Model.user.FirstName" readonly="readonly" />
+            </div>
+
+            @*Label and box for Last name, called EditLastName*@
+            <div class="pt-2">
+                <label for="EditLastName"> Last Name: </label>
+            </div>
+            <div class="pb-2 form-group">
+                <input name="EditLastName" id="EditLastName" class="form-control border border-info" type="text" value="@Model.user.LastName" readonly="readonly" />
+            </div>
+
+            @*Label and box for email, called EditEmail*@
+            <div class="pt-2">
+                <label for="EditEmail"> Email: </label>
+            </div>
+            <div class="pb-2 form-group">
+                <input class="form-control border border-info" name="EditEmail" id="EditEmail" type="text" value="@Model.user.Email" readonly="readonly" />
+            </div>
+
+            @*Label and box for User Id, called EditID*@
+            <div class="pt-2">
+                <label for="EditID"> User ID: </label>
+            </div>
+            <div class="pb-2 form-group">
+                <input class="form-control border border-info" name="EditID" id="EditID" type="text" value="@Model.user.Id" readonly="readonly" />
+            </div>
+
+            @*Label and box for Bio, called EditBio*@
+            <div class="pt-2">
+                <label for="EditBio"> Bio: </label>
+            </div>
+            <div class="pb-2 form-group">
+                <textarea class="form-control border border-info" name="EditBio" id="EditBio" type="text" readonly="readonly" rows="3">@Model.user.Description</textarea>
+            </div>
+
+
+            @*Only if user is proffesro display text area for links*@
+            @if (User.IsInRole(SD.InstructorRole))
+            {
+                <div class="pt-2">
+                    <label for="NewLinkId"> Profile Links: </label>
+                </div>
+                @if (Model.Links.Count > 0)
+                {
+                    foreach (var x in Model.Links)
+                    {
+
+                        @* //this creates both an textinput and a-tag that are filled with x.Link, the input hidden and the link is displayed, if you
+                            click the edit button, the a-tag link is hidden and the textinput is displayed*@
+
+                        <div class="pb-2 form-group">
+                            <input id="@x.Id" name="@x.Id" type="text" value="@x.Link" class="ProfileLink form-control border border-info" readonly hidden rows="3" />
+                            <a id="@x.Id" name="@x.Id" href="@x.Link" class=" form-control clicking border border-info" readonly> @x.Link</a>
+                        </div>
+                    }
+                }
+                @for (int i = 0; i < 5; i++)
+                {
+                    <div class="pb-2 form-group">
+                        <input id="@("NewLinkId" + i)" name="@("NewLinkId" + i)" type="text" class="NewLink ProfileLink form-control border border-info" readonly hidden rows="3" />
+                    </div>
+                }
+            }
+
+            @*press this to edit*@
+            <div class="form-group">
+                <button type="button" id="EditButton" name="EditButton" class="btn btn-info" onclick="makeEditable()">Edit</button>
+                <button type="submit" id="ConfirmButton" name="ConfirmButton" class="btn btn-info" hidden disabled>Confirm</button>
+                @if (User.IsInRole(SD.StudentRole))
+                {
+                    <script>
+                        var editable = false;
+                        function makeEditable() {
+                            document.getElementById('EditFirstName').toggleAttribute('readonly');
+                            document.getElementById('EditLastName').toggleAttribute('readonly');
+                            document.getElementById('EditEmail').toggleAttribute('readonly');
+                            document.getElementById('EditBio').toggleAttribute('readonly');
+                            //document.getElementById('EditLink').toggleAttribute('readonly');
+                            if (editable == false) {
+                                document.getElementById('ConfirmButton').hidden = false;
+                                document.getElementById('ConfirmButton').disabled = false;
+                                document.getElementById('UploadImage').hidden = false;
+                                document.getElementById('UploadImage').disabled = false;
+                                document.getElementById('ChooseImage').hidden = false;
+                                document.getElementById('ChooseImage').disabled = false;
+                                document.getElementById('HiddenLabel').hidden = false;
+
+                                document.getElementById('EditButton').hidden = true;
+                                document.getElementById('EditButton').disabled = true;
+
+                                editable = true;
+                            }
+                            else {
+                                document.getElementById('ConfirmButton').hidden = true;
+                                document.getElementById('ConfirmButton').disabled = true;
+                                document.getElementById('UploadImage').hidden = true;
+                                document.getElementById('UploadImage').disabled = true;
+                                document.getElementById('ChooseImage').hidden = true;
+                                document.getElementById('ChooseImage').disabled = true;
+                                document.getElementById('HiddenLabel').hidden = true;
+
+                                document.getElementById('EditButton').hidden = false;
+                                document.getElementById('EditButton').disabled = false;
+
+
+                                editable = false
+                            }
+                        }
+                    </script>
+                }
+                @if (User.IsInRole(SD.InstructorRole))
+                {
+                    <script>
+                        var editable = false;
+                        function makeEditable() {
+                            document.getElementById('EditFirstName').toggleAttribute('readonly');
+                            document.getElementById('EditLastName').toggleAttribute('readonly');
+                            document.getElementById('EditEmail').toggleAttribute('readonly');
+                            document.getElementById('EditBio').toggleAttribute('readonly');
+                            //document.getElementById('EditLink').toggleAttribute('readonly');
+                            //document.getElementsByClassName('ProfileLink').toggleAttribute('readonly');
+                            var elementList = document.getElementsByClassName('ProfileLink');
+
+                            var clicklist = document.getElementsByClassName('clicking');
+
+                            //this toggles what is visibile/ hidden (either the link or the textbox)
+                            for (var i = 0; i < clicklist.length; i++) {
+                                clicklist[i].toggleAttribute('hidden');
+                                elementList[i].toggleAttribute('hidden');
+
+                            }
+
+                            for (var i = 0; i < elementList.length; i++) {
+                                elementList[i].toggleAttribute('readonly');
+                            }
+
+                            if (editable == false) {
+                                document.getElementById('ConfirmButton').hidden = false;
+                                document.getElementById('ConfirmButton').disabled = false;
+                                document.getElementById('UploadImage').hidden = false;
+                                document.getElementById('UploadImage').disabled = false;
+                                document.getElementById('ChooseImage').hidden = false;
+                                document.getElementById('ChooseImage').disabled = false;
+                                document.getElementById('HiddenLabel').hidden = false;
+
+                                document.getElementById('EditButton').hidden = true;
+                                document.getElementById('EditButton').disabled = true;
+
+                                elementList = document.getElementsByClassName("NewLink");
+                                for (var i = 0; i < elementList.length; i++) {
+                                    elementList[i].hidden = false;
+                                }
+
+                                editable = true;
+                            }
+                            else {
+                                document.getElementById('ConfirmButton').hidden = true;
+                                document.getElementById('ConfirmButton').disabled = true;
+                                document.getElementById('UploadImage').hidden = true;
+                                document.getElementById('UploadImage').disabled = true;
+                                document.getElementById('ChooseImage').hidden = true;
+                                document.getElementById('ChooseImage').disabled = true;
+                                document.getElementById('HiddenLabel').hidden = true;
+
+                                document.getElementById('EditButton').hidden = false;
+                                document.getElementById('EditButton').disabled = false;
+
+                                elementList = document.getElementsByClassName("NewLink");
+                                for (var i = 0; i < elementList.length; i++) {
+                                    elementList[i].hidden = false;
+                                }
+
+                                editable = false
+                            }
+                        }
+
+                    </script>
+                }
+
+            </div>
+        </form>
+    </div>
+
+
+
+</div>
+

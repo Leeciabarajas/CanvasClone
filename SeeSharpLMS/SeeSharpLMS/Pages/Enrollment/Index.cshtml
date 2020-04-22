@@ -1,0 +1,87 @@
+﻿@page
+@model SeeSharpLMS.EnrollmentIndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Enrollment Hub</h1>
+
+<p>
+    <a class="btn btn-success col-3  form-control text-white h3" asp-page="CreateAlt">Register</a>
+</p>
+<table class="table table-info">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Enrollment[0].Section.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enrollment[0].Section.Course.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enrollment[0].Section.Course.Number)
+            </th>
+            <th>
+                Instructor
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enrollment[0].FinalGrade)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class="bg-light table-info">
+        @foreach (var item in Model.Enrollment)
+        {
+            @if (item.FinalGrade == null)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Course.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Course.Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.ApplicationUser.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FinalGrade)
+                    </td>
+                    <td>
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-info btn-sm text-white h3">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm h3">Drop</a>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Course.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.Course.Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Section.ApplicationUser.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FinalGrade)
+                    </td>
+                    <td>
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-info btn-sm text-white h3">Details</a>
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>

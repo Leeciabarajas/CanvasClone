@@ -1,0 +1,94 @@
+﻿@using SeeSharpLMS.Utility
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SeeSharpLMS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-info border-bottom box-shadow mb-3">
+            <div class="container">
+
+                @if (User.IsInRole(SD.InstructorRole) || User.IsInRole(SD.StudentRole))
+                {
+                    <h4>
+                        <a class="navbar-bran text-left font-weight-bolder" style="color:slategray; color: white; text-shadow: -1px -1px 0 #636669, 1px -1px 0 #636669, -1px 1px 0 #636669, 1px 1px 0 #636669;  " asp-area="" asp-page="/LandingPage">SeeSharpLMS</a>
+
+                    </h4>
+
+                }
+                else
+                {
+                    <h4>
+                        <a class="navbar-bran text-left font-weight-bolder" style="color:slategray; color: white; text-shadow: -1px -1px 0 #636669, 1px -1px 0 #636669, -1px 1px 0 #636669, 1px 1px 0 #636669;  " asp-area="" asp-page="/Index">SeeSharpLMS</a>
+
+
+                    </h4>
+
+                    @*<a class="navbar-brand" asp-area="" asp-page="/Index">SeeSharpLMS</a>*@
+                }
+
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.IsInRole(SD.InstructorRole) || User.IsInRole(SD.StudentRole))
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/LandingPage"><i class="fas fa-home"></i>&nbsp; Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Calendar"><i class="fas fa-calendar-alt"></i>&nbsp; Calendar</a>
+                            </li>
+
+
+                        }
+                        @if (User.IsInRole(SD.InstructorRole))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Section/Index"><i class="fas fa-chalkboard-teacher"></i>&nbsp; My Sections</a>
+                            </li>
+                        }
+                        @if (User.IsInRole(SD.StudentRole))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Enrollment/Index"><i class="fas fa-chalkboard"></i>&nbsp; My Enrollments</a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-light" asp-area="" asp-page="/AccountBalance/Index"><i class="fas fa-file-invoice-dollar"></i>&nbsp; Account Balance</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @*<footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - SeeSharpLMS - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            </div>
+        </footer>*@
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

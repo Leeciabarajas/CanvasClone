@@ -1,0 +1,109 @@
+﻿@using SeeSharpLMS.Utility
+@model SeeSharpLMS.CalendarModel
+@{
+    Layout = "_Layout.cshtml";
+
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SeeSharpLMS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+    <link href='~/lib/core/main.css' rel='stylesheet' />
+    <link href='~/lib/daygrid/main.css' rel='stylesheet' />
+    <script src='~/lib/core/main.js'></script>
+    <script src='~/lib/daygrid/main.js'></script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['dayGrid'],
+
+                events: [
+                @if (User.IsInRole(SD.InstructorRole))
+                {
+                    if (Model.assignments.Count > 0) {
+                        var lastItem = Model.assignments.Last();
+                        foreach (var x in Model.assignments)
+                        {
+                         @:{
+                              @: title: ('@x.Title'),
+                              @: start: ('@x.DueDate.ToString("yyyy-MM-ddTHH\\:mm\\:ss")'),
+                              @: url: 'Assignment/Details?id=@x.Id'
+
+                     @:}
+                       if (x != lastItem)
+                            {
+                          @:,
+                        }
+                            else
+                            {
+                            @:
+                        }
+                        }
+                    }
+                }
+                else {
+                    if (Model.studentAssignment.Count > 0) {
+                        var lastItem = Model.studentAssignment.Last();
+                        foreach (var x in Model.studentAssignment)
+                        {
+                        @:{
+                              @: title: ('@x.Assignment.Title'),
+                              @: start: ('@x.Assignment.DueDate.ToString("yyyy-MM-ddTHH\\:mm\\:ss")'),
+                              @: url: 'Assignment/SubmitAssignment?id=@x.Id'
+
+                     @:}
+                       if (x != lastItem)
+                            {
+                          @:,
+                        }
+                            else
+                            {
+                            @:
+                        }
+                            }
+                        }
+                    }
+                ]
+            });
+
+
+
+            calendar.render();
+        });
+
+    </script>
+</head>
+<body>
+    <header>
+        
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @*<footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2020 - SeeSharpLMS - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            </div>
+        </footer>*@
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

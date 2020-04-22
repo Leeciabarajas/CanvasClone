@@ -1,0 +1,156 @@
+﻿@page
+@model SeeSharpLMS.SubmitAssignmentModel
+@{
+    ViewData["Title"] = "SubmitAssignment";
+}
+
+
+@* assignment name and points header *@
+<h1 style="text-align:left;">
+    Submit   @Html.DisplayFor(model => model.StudentAssignment.Assignment.Title)
+    <span style="float:right; color:red;">
+        @Html.DisplayFor(model => model.StudentAssignment.Assignment.PointValue) points
+    </span>
+</h1>
+
+
+<div>
+    <div class="row">
+
+         @*Display date information*@  
+        <div class="form-control text-lg-center border border-info" >
+
+            <label style="font-weight:bold;">
+                @Html.DisplayNameFor(model => model.StudentAssignment.Assignment.OpenDate):
+            </label>
+            @Html.DisplayFor(model => model.StudentAssignment.Assignment.OpenDate)
+
+            @*&emsp; this just addds a tab space*@
+            &emsp;
+
+            <label style="font-weight:bold;">
+                @Html.DisplayNameFor(model => model.StudentAssignment.Assignment.DueDate):
+            </label>
+            @Html.DisplayFor(model => model.StudentAssignment.Assignment.DueDate)
+
+            @*&emsp; this just addds a tab space*@
+            &emsp;
+
+            <label style="font-weight:bold;">
+                @Html.DisplayNameFor(model => model.StudentAssignment.Assignment.CloseDate):
+            </label>
+            @Html.DisplayFor(model => model.StudentAssignment.Assignment.CloseDate)
+        </div>
+
+
+         @*Assignment Instructions*@ 
+        <div>
+
+            <br />
+            <label style="font-weight:bold;">
+                @Html.DisplayNameFor(model => model.StudentAssignment.Assignment.Instructions):
+            </label>
+
+            <br />
+
+            @Html.DisplayFor(model => model.StudentAssignment.Assignment.Instructions)
+
+            <br />  @*these are just for spacing look*@
+            @*<label style="font-weight:bold;">
+            @Html.DisplayNameFor(model => model.StudentAssignment.Assignment.AssignmentTypeId):
+        </label>
+        @Html.DisplayFor(model => model.StudentAssignment.Assignment.AssignmentTypeId)*@
+            <br />
+            <br />
+
+        </div>
+</div>
+
+    @* *************************************** TODO: IF/ELSE TEXTFILE OR FILE UPLOUD ***********************************************  *@
+
+<form method="post" enctype="multipart/form-data">
+
+    @* Displays textbox  *@
+
+    @*  Choose textbox or File upload*@
+
+
+    <div class="form-group">
+        @*<label asp-for="Submission.StudentAssignmentId" class="control-label">@Model.StudentAssignment.Id</label>*@
+        <input asp-for="Submission.StudentAssignmentId" type="hidden" class="form-control" value="@Model.StudentAssignment.Id" readonly />
+    </div>
+
+    <div class="form-group">
+        <input asp-for="Submission.Link" class="form-control" hidden />
+    </div>
+
+    @if (Model.StudentAssignment.Assignment.AssignmentTypeId == 1)
+    {
+        <div class="form-group border-info">
+            <textarea asp-for="Submission.TextEntry" id="TextEntry" rows="5" class="form-control border border-info" placeholder="Enter text here..."></textarea>
+            <span asp-validation-for="Submission.TextEntry" class="text-danger"></span>
+        </div>
+
+        @*Once the student submit their assignment, then the notification would be gone!*@
+        <div class="form-group">
+            <label asp-for="StudentAssignment.Assignment.Flag" class="control-label">
+                <input asp-for="StudentAssignment.Assignment.Flag" type="checkbox" disabled hidden />
+            </label>
+
+            <div class="form-group">
+                <label asp-for="Submission.Flag" class="control-label">
+                    <input asp-for="Submission.Flag" type="checkbox" checked hidden />
+                </label>
+                <span asp-validation-for="Submission.Flag" class="text-danger"></span>
+            </div>
+
+            <span asp-validation-for="StudentAssignment.Assignment.Flag" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-info" />
+        </div>
+
+    }
+    @*file uploud:*@
+    else
+    {
+        <div class="form-group ">
+            <div class="pt-2">
+                <label class="text-info font-weight-bold" asp-for="Input.FilePath">Upload File: </label>
+                <input type="file" class="form-control-file small" name="file">
+                <span asp-validation-for="Input.FilePath" class="text-danger form-control-file"></span><br />
+            </div>
+
+            @*Once the student submit their assignment, then the notification would be gone!*@
+            <div class="form-group" hidden>
+                <label asp-for="StudentAssignment.Assignment.Flag" class="control-label">
+                    <input asp-for="StudentAssignment.Assignment.Flag" type="checkbox" disabled hidden />
+                </label>
+                <span asp-validation-for="StudentAssignment.Assignment.Flag" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="Submission.Flag" class="control-label">
+                    <input asp-for="Submission.Flag" type="checkbox" checked hidden />
+                </label>
+                <span asp-validation-for="Submission.Flag" class="text-danger"></span>
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" class="btn btn-info">Upload your file</button>
+            </div>
+        </div>
+    }
+
+
+</form>
+
+</div>
+
+
+
+
+<div>
+    <a class=" text-secondary"asp-page="./Index">Back to List</a>
+</div>

@@ -1,0 +1,87 @@
+﻿@page
+@using SeeSharpLMS.Utility
+@model SeeSharpLMS.SectionIndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (User.IsInRole(SD.InstructorRole))
+{
+
+    <div class="container row">
+        <h1 class="col-9">Section Hub</h1>
+
+
+    </div>
+    <p>
+        <a class="btn btn-info col-3  form-control text-white" asp-page="../Course/Index">Edit Courses</a>
+        <a class="btn btn-info col-3  form-control text-white" asp-page="Create">Create New Section</a>
+    </p>
+    <table class="table table-info">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Section[0].Course.Subject)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Section[0].Course.Number)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Section[0].Term)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Section[0].DisplayTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Section[0].Days)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Section[0].Location)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Section[0].EnrollmentCap)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="table-info bg-light">
+            @foreach (var item in Model.Section)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course.Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Term.TermDisplay)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Days)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EnrollmentCap)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id"    class="btn btn-success btn-sm text-white">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-info btn-sm text-white">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id"  class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1 class="text-danger">Access Denied</h1>
+
+}

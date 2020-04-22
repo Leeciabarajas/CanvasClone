@@ -1,0 +1,76 @@
+﻿@page
+@model SeeSharpLMS.StudentAssignmentModel
+@{
+    ViewData["Title"] = "StudentAssignment";
+}
+
+<h1>Assignment</h1>
+
+@* Since Student can not create any assignments, only instructor does. *@
+@*<p>
+        <a asp-page="Create" class="btn btn-info col-3 form-control text-white">Create New</a>
+    </p>*@
+<table class="table table-info">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.AssignmentTypeId)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.PointValue)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.Instructions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.DueDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.CloseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.OpenDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class="table-info bg-light">
+        @foreach (var item in Model.StudentAssignment)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assignment.AssignmentTypeId)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assignment.PointValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assignment.Title)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assignment.Instructions)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assignment.DueDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assignment.CloseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assignment.OpenDate)
+                </td>
+                <td>
+                    <a asp-page="./SubmitAssignment" asp-route-id="@item.Id" class="btn btn-success btn-sm text-white">Submit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

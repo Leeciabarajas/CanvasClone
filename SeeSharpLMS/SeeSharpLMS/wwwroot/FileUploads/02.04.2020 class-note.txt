@@ -1,0 +1,40 @@
+
+SQL - Injection
+
+Select* from advisor
+Where lastname = 'txtLastName.text'
+
+drop table
+
+
+Validate  all input parameters:
+	
+	*Probability that someone's last name contains 'drop' or 'select'?
+	*Prevent specific characters like . , ' ' <......
+	* Prevent binary data, javascript
+	*What can be values of priority? Low, high, medium, Check for other things.
+	*Never build SQL directly from user input.
+
+
+Cross Site Request Forgery (CSRF)
+
+	*Usabulity - Security
+
+Symmetric key encription:
+
+Bob:	"Hello Alice" -> ENCRYPT    <- Secret key  
+	------------------------------	"XXXXXXXXX" <=> "Hello Alice"	
+Alice:	"Hello Alice" <- DECRYPT      <- Secret key
+
+
+Asymmetric key encription:
+
+	Same key have two functionalities: Private to lock, Public to unlock;
+
+
+
+
+
+
+
+

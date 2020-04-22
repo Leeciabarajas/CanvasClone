@@ -1,0 +1,79 @@
+﻿@page
+@using SeeSharpLMS.Utility
+@model SeeSharpLMS.SectionDeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+@if (User.IsInRole(SD.InstructorRole))
+{
+
+    <h1>Delete</h1>
+
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>Section</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.ApplicationUser)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.ApplicationUser.Id)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Course)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Course.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Term)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Term.TermDisplay)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.StartTime)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.StartTime)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.EndTime)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.EndTime)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Days)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Days)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.Location)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.Location)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Section.EnrollmentCap)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Section.EnrollmentCap)
+            </dd>
+        </dl>
+
+        <form method="post">
+            <input type="hidden" asp-for="Section.Id" />
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <a asp-page="./Index">Back to List</a>
+        </form>
+    </div>
+}
+else
+{
+    <h1 class="text-danger">Access Denied</h1>
+}

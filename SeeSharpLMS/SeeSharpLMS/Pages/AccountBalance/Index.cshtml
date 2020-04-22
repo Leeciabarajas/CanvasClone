@@ -1,0 +1,60 @@
+﻿@page
+@model SeeSharpLMS.Pages.AccountBalance.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Your Balance:</h1>
+
+<table class="table table-info">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Charge[0].Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Charge[0].Reason)
+            </th>
+            <th>
+                Charges
+            </th>
+            <th>
+                Payments
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-info bg-light" >
+        @foreach (var item in Model.Charge)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reason)
+                </td>
+                <td>
+                    @if (item.Amount > 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    }
+                </td>
+                <td>
+                    @if (item.Amount < 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    }
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="container col-4">
+        <a class="btn btn-success col-12  form-control text-white h3" asp-page="MakePayment">Make a Payment</a>
+    </div>
+    <div class="container col-8">
+        <h3 class="text-justify">Total Balance: $@String.Format("{0:n}", Model.TotalBalance)</h3>
+    </div>
+</div>

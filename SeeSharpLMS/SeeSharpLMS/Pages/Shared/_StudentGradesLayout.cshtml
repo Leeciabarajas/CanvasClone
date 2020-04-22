@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+@model SeeSharpLMS.StudentGradesModel
+
+@{
+    ViewData["Title"] = "StudentGrades";
+}
+
+
+@{
+    Layout = "_Layout.cshtml";
+
+}
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+    </script>
+        @{ 
+            int j = 0;
+            foreach (var x in Model.StudentAssignment)
+            {
+                if (x.MinScore.HasValue)
+                {
+                <script>
+                    google.charts.setOnLoadCallback(@("drawChart" + j))
+                    function @("drawChart" + j)()
+                    {
+                        var data = new google.visualization.arrayToDataTable([['Scores', @x.MinScore, @x.Q1, @x.Q3, @x.MaxScore]], true);
+
+                        var options = {
+                            legend: 'none',
+                            orientation: 'vertical',
+                            height: 100,
+                        };
+                        var chart = new google.visualization.CandlestickChart(document.getElementById('@("chart" + j)'));
+                        chart.draw(data, options);
+                    }
+                </script>
+                }
+                j++;
+
+
+                }
+            }
+
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>

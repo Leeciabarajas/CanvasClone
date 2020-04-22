@@ -1,0 +1,131 @@
+﻿@page
+@model SeeSharpLMS.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Assignment</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignment.Section)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignment.Section.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignment.AssignmentType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignment.AssignmentType.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignment.PointValue)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignment.PointValue)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignment.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignment.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignment.Instructions)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignment.Instructions)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignment.DueDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignment.DueDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignment.CloseDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignment.CloseDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assignment.OpenDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assignment.OpenDate)
+        </dd>
+
+    </dl>
+
+
+
+</div>
+
+
+
+
+@*<div class="form-text">
+        @if (Model.Assignment.AssignmentTypeId == 1)
+        {
+            @Html.DisplayNameFor(model => model.Submission.TextEntry)<br />
+            @Html.DisplayFor(model => model.Submission.TextEntry)
+        }
+        else
+        {
+            if (Model.FilePath == null)
+            {
+                <label asp-for="Submission.FilePath">Student's Assignment: </label>
+                <p class="text-danger">Not Submitted yet!</p>
+
+            }
+            else
+            {
+                @Html.DisplayNameFor(model => model.Submission.FilePath)<br />
+                <label asp-for="Submission.FilePath">Student's Assignment:</label><br />
+                @Html.DisplayFor(model => model.Submission.FilePath)
+                <a href="~/FileUploads/@Model.Submission.FilePath" download>@Model.Submission.FilePath</a>
+            }
+
+        }
+    </div>*@
+
+<br />
+<br />
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+
+<div id="piechart"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    // Load google charts
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Draw the chart and set the chart values
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['A', 8],
+            ['B', 2],
+            ['C', 4],
+            ['D', 2],
+            ['F', 8]
+        ]);
+
+        // Optional; add a title and set the width and height of the chart
+        var options = { 'title': 'Assigment Grades', 'width': 550, 'height': 400 };
+
+        // Display the chart inside the <div> element with id="piechart"
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    }
+</script>

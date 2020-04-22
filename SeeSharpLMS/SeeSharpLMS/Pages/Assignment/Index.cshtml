@@ -1,0 +1,179 @@
+﻿@page
+@using SeeSharpLMS.Utility
+@model SeeSharpLMS.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@*<h1 class="col-9">@Model.section[0].Course.DisplayCourse @Model.section[0].Id</h1>*@
+<br />
+
+
+@if (User.IsInRole(SD.InstructorRole))
+{
+    <p>
+        <a asp-page="Create" class="btn btn-info col-3 form-control text-white">Create New Assignment</a>
+
+    </p>
+
+    <div class="justify-content-center d-flex">
+        <div class="align-content-center" id="chart_div"></div>
+    </div>
+}
+else if (User.IsInRole(SD.StudentRole))
+{
+    <p> All Assigments: </p>
+}
+
+
+
+<table class="table table-info">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.AssignmentTypeId)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.PointValue)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssignment[0].Assignment.DueDate)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class="table-info bg-light">
+        @if (User.IsInRole(SD.StudentRole))
+        {
+            @foreach (var item in Model.StudentAssignment)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Assignment.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Assignment.AssignmentTypeId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Assignment.PointValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Assignment.DueDate)
+                    </td>
+                    <td>
+
+                        <a asp-page="./SubmitAssignment" asp-route-id="@item.Assignment.Id" class="btn btn-success btn-sm text-white">Submit</a>
+
+                    </td>
+                </tr>
+            }
+        }
+
+        else if (User.IsInRole(SD.InstructorRole))
+        {
+
+            @foreach (var item in Model.Assignment)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssignmentType.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PointValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DueDate)
+                    </td>
+                    <td>
+                        <a asp-page="../Grading/Index" asp-route-id="@item.Id" class="btn btn-success btn-sm text-white">Grade</a>
+
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-success btn-sm text-white">Edit</a>
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-info btn-sm text-white">Details</a>
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm text-white">Delete</a>
+
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+
+        var A = @Model.Analytics.GradeA;
+        var B = @Model.Analytics.GradeB;
+        var C = @Model.Analytics.GradeC;
+        var D = @Model.Analytics.GradeD;
+        var F = @Model.Analytics.GradeF;
+        // Load google charts
+        google.charts.load('current', { packages: ['corechart', 'bar'] });
+        if (@Model.Analytics.TotalGrades > 0) {
+            google.charts.setOnLoadCallback(drawAxisTickColors);
+        }
+        
+
+        function drawAxisTickColors() {
+            var data = google.visualization.arrayToDataTable([
+                ['Letter', 'Count'],
+                ['A', A],
+                ['B', B],
+                ['C', C],
+                ['D', D],
+                ['F', F]
+            ]);
+
+            var options = {
+                title: 'Current Grade Distribution',
+                chartArea: { width: '50%' },
+                hAxis: {
+                    title: 'Students',
+                    minValue: 0,
+                    textStyle: {
+                        bold: true,
+                        fontSize: 12,
+                        color: '#4d4d4d'
+                    },
+                    titleTextStyle: {
+                        bold: true,
+                        fontSize: 14,
+                        color: '#4d4d4d'
+                    }
+                },
+                vAxis: {
+                    title: 'Letter Grades',
+                    textStyle: {
+                        fontSize: 12,
+                        bold: true,
+                        color: '#848484'
+                    },
+                    titleTextStyle: {
+                        fontSize: 14,
+                        bold: true,
+                        color: '#848484'
+                    }
+                }
+            };
+            var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+}
+
